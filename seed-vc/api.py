@@ -1,13 +1,14 @@
 import logging
 import os
 import uuid
+import shutil
 from contextlib import asynccontextmanager
-from tempfile import NamedTemporaryFile
+from pathlib import Path
+import soundfile as sf
 
-import boto3
-import torchaudio
-from fastapi import BackgroundTasks, Depends, FastAPI, Header, HTTPException
+from fastapi import BackgroundTasks, Depends, FastAPI, Header, HTTPException, UploadFile, File
 from fastapi.security import APIKeyHeader
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from inference import load_models, process_voice_conversion
@@ -20,6 +21,19 @@ models = None
 API_KEY = os.getenv("API_KEY")
 
 api_key_header = APIKeyHeader(name="Authorization", auto_error=False)
+
+# Local storage paths
+UPLOAD_DIR = Path("./uploads")
+OUTPUT_DIR = Path("./outputs")
+UPLOADS_PREFIX = "seed-vc-audio-uploads"
+OUTPUTS_PREFIX = "seedvc-outputs"
+
+# Create directories if they don't exist
+UPLOAD_DIR.mkdir(exist_ok=True)
+OUTPUT_DIR.mkdir(exist_ok=True)
+
+# Base URL for accessing files
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 
 
 async def verify_api_key(authorization: str = Header(None)):
@@ -37,24 +51,6 @@ async def verify_api_key(authorization: str = Header(None)):
         raise HTTPException(status_code=401, detail="Invalid API key")
 
     return token
-
-
-def get_s3_client():
-    client_kwargs = {'region_name': os.getenv("AWS_REGION", "us-east-1")}
-
-    if os.getenv("AWS_ACCESS_KEY_ID") and os.getenv("AWS_SECRET_ACCESS_KEY"):
-        client_kwargs.update({
-            'aws_access_key_id': os.getenv("AWS_ACCESS_KEY_ID"),
-            'aws_secret_access_key': os.getenv("AWS_SECRET_ACCESS_KEY")
-        })
-
-    return boto3.client('s3', **client_kwargs)
-
-
-s3_client = get_s3_client()
-
-S3_PREFIX = os.getenv("S3_PREFIX", "seedvc-outputs")
-S3_BUCKET = os.getenv("S3_BUCKET", "elevenlabs-clone")
 
 
 @asynccontextmanager
