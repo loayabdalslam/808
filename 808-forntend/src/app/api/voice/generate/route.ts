@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer default-api-key-for-development',
+          'Authorization': 'Bearer 123456789',
         },
         body: JSON.stringify(payload),
       });

@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Global variables
-API_KEY = os.getenv("API_KEY", "default-api-key-for-development")  # Set default for development
+API_KEY = os.getenv("API_KEY", "123456789")  # Set default for development
 
 api_key_header = APIKeyHeader(name="Authorization", auto_error=False)
 

@@ -25,7 +25,7 @@ const StaticBackground = () => (
 
 // Hero section with stunning design
 const Hero = () => (
-  <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <div className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 lg:pt-20">
     <StaticBackground />
     <ClientAnimations />
 
@@ -403,7 +403,7 @@ const Footer = () => (
 
 // Navigation Component
 const Navigation = () => (
-  <header className="absolute inset-x-0 top-0 z-50">
+  <header className="absolute inset-x-0 top-0 z-50 bg-black/10 backdrop-blur-md border-b border-white/10">
     <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
       <div className="flex lg:flex-1">
         <Link href="/" className="-m-1.5 p-1.5">
@@ -423,13 +423,13 @@ const Navigation = () => (
         </Link>
       </div>
 
-      <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-4">
-        <Link href="/login" className="text-sm font-semibold leading-6 text-white/80 hover:text-white transition-colors px-4 py-2">
+      <div className="flex lg:flex-1 lg:justify-end gap-x-2 lg:gap-x-4">
+        <Link href="/login" className="text-sm font-semibold leading-6 text-white/80 hover:text-white transition-colors px-3 py-2 lg:px-4">
           Log in
         </Link>
         <Link
           href="/signup"
-          className="rounded-full bg-white/10 backdrop-blur-sm px-4 py-2 text-sm font-semibold text-white border border-white/20 hover:bg-white/20 transition-all duration-300"
+          className="rounded-full bg-white/10 backdrop-blur-sm px-3 py-2 lg:px-4 text-sm font-semibold text-white border border-white/20 hover:bg-white/20 transition-all duration-300"
         >
           Sign up
         </Link>

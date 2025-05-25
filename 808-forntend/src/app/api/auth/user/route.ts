@@ -5,7 +5,8 @@ import { getUserByToken } from "../../../../lib/db-service";
 export async function GET(request: NextRequest) {
   try {
     // Get the auth token from cookies
-    const token = cookies().get("auth-token")?.value;
+    const cookieStore = await cookies();
+    const token = cookieStore.get("auth-token")?.value;
 
     if (!token) {
       return NextResponse.json(
